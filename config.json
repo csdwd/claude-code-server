@@ -1,0 +1,39 @@
+{
+  "port": 3000,
+  "host": "0.0.0.0",
+  "claudePath": "/home/junhang/.nvm/versions/node/v22.21.0/bin/claude",
+  "nvmBin": "/home/junhang/.nvm/versions/node/v22.21.0/bin",
+  "defaultProjectPath": "/home/junhang/workspace",
+  "logFile": "./logs/server.log",
+  "pidFile": "./logs/server.pid",
+  "dataDir": "./data",
+  "storageType": "memory",
+  "redisUrl": null,
+  "sessionRetentionDays": 30,
+  "taskQueue": {
+    "concurrency": 3,
+    "defaultTimeout": 300000
+  },
+  "rateLimit": {
+    "enabled": true,
+    "windowMs": 60000,
+    "maxRequests": 100
+  },
+  "defaultModel": "claude-sonnet-4-5",
+  "maxBudgetUsd": 10.0,
+  "webhook": {
+    "enabled": false,
+    "defaultUrl": null,
+    "timeout": 5000,
+    "retries": 3
+  },
+  "statistics": {
+    "enabled": true,
+    "collectionInterval": 60000
+  },
+  "mcp": {
+    "enabled": false,
+    "configPath": null
+  },
+  "logLevel": "info"
+}

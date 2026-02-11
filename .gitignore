@@ -1,0 +1,30 @@
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Logs
+logs/
+*.log
+*.pid
+
+# Data
+data/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Configuration
+config.json # Local configuration, should not be committed
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+.history/
+
+# OS generated files
+.DS_Store
+.Trash
+Thumbs.db
