@@ -8,18 +8,33 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
+// 获取用户主目录（兼容 sudo 环境）
+function getHomeDir() {
+  // 优先使用环境变量中的 HOME
+  if (process.env.HOME && process.env.HOME !== '/root') {
+    return process.env.HOME;
+  }
+  // 如果使用 sudo，尝试获取实际用户的 home
+  const sudoUser = process.env.SUDO_USER || process.env.USER;
+  if (sudoUser && sudoUser !== 'root') {
+    return path.join('/home', sudoUser);
+  }
+  // 回退到 os.homedir()
+  return os.homedir();
+}
+
 // 配置目录和文件
-const configDir = path.join(os.homedir(), '.claude-code-server');
+const configDir = path.join(getHomeDir(), '.claude-code-server');
 const configPath = path.join(configDir, 'config.json');
 const defaultConfig = {
   port: 5546,
   host: '0.0.0.0',
-  claudePath: path.join(os.homedir(), '.nvm', 'versions', 'node', 'v22.21.0', 'bin', 'claude'),
-  nvmBin: path.join(os.homedir(), '.nvm', 'versions', 'node', 'v22.21.0', 'bin'),
-  defaultProjectPath: path.join(os.homedir(), 'workspace'),
-  logFile: path.join(os.homedir(), '.claude-code-server', 'logs', 'server.log'),
-  pidFile: path.join(os.homedir(), '.claude-code-server', 'server.pid'),
-  dataDir: path.join(os.homedir(), '.claude-code-server', 'data'),
+  claudePath: path.join(getHomeDir(), '.nvm', 'versions', 'node', 'v22.21.0', 'bin', 'claude'),
+  nvmBin: path.join(getHomeDir(), '.nvm', 'versions', 'node', 'v22.21.0', 'bin'),
+  defaultProjectPath: path.join(getHomeDir(), 'workspace'),
+  logFile: path.join(getHomeDir(), '.claude-code-server', 'logs', 'server.log'),
+  pidFile: path.join(getHomeDir(), '.claude-code-server', 'server.pid'),
+  dataDir: path.join(getHomeDir(), '.claude-code-server', 'data'),
   sessionRetentionDays: 30,
   taskQueue: {
     concurrency: 3,

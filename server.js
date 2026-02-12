@@ -3,8 +3,23 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 
+// 获取用户主目录（兼容 sudo 环境）
+function getHomeDir() {
+  // 优先使用环境变量中的 HOME
+  if (process.env.HOME && process.env.HOME !== '/root') {
+    return process.env.HOME;
+  }
+  // 如果使用 sudo，尝试获取实际用户的 home
+  const sudoUser = process.env.SUDO_USER || process.env.USER;
+  if (sudoUser && sudoUser !== 'root') {
+    return path.join('/home', sudoUser);
+  }
+  // 回退到 os.homedir()
+  return os.homedir();
+}
+
 // 配置目录和文件
-const configDir = path.join(os.homedir(), '.claude-code-server');
+const configDir = path.join(getHomeDir(), '.claude-code-server');
 const configPath = path.join(configDir, 'config.json');
 
 // 默认配置（用于未找到路径时的回退）
