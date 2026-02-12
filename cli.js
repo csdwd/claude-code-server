@@ -46,7 +46,9 @@ const defaultConfig = {
     enabled: false,
     configPath: null
   },
-  logLevel: 'info'
+  logLevel: 'info',
+  allowRoot: false,
+  securityCheck: true
 };
 
 // 确保配置目录存在并加载配置
@@ -446,8 +448,26 @@ async function configureSettings() {
   Object.assign(config, basicAnswers);
 
   // 第二部分：安全配置
+  const securityAnswers = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'allowRoot',
+      message: '允许以 root 用户运行? (不推荐)',
+      default: config.allowRoot || false,
+    },
+    {
+      type: 'confirm',
+      name: 'securityCheck',
+      message: '启用安全检查?',
+      default: config.securityCheck !== false,
+    },
+  ]);
 
-  // 第二部分：Webhook 配置
+  // 更新安全配置
+  config.allowRoot = securityAnswers.allowRoot;
+  config.securityCheck = securityAnswers.securityCheck;
+
+  // 第三部分：Webhook 配置
   const { enableWebhook } = await inquirer.prompt([
     {
       type: 'confirm',
@@ -546,6 +566,7 @@ async function configureSettings() {
   console.log('');
   console.log(chalk.bold.cyan('配置摘要:'));
   console.log(`  ${chalk.white('端口:')} ${config.port}`);
+  console.log(`  ${chalk.white('安全:')} allowRoot=${config.allowRoot ? chalk.red('true') : chalk.green('false')}, securityCheck=${config.securityCheck ? chalk.green('true') : chalk.red('false')}`);
   console.log(`  ${chalk.white('Webhook:')} ${config.webhook.enabled ? chalk.green('已启用') : chalk.gray('未启用')}`);
   if (config.webhook.enabled && config.webhook.defaultUrl) {
     console.log(`  ${chalk.white('URL:')} ${config.webhook.defaultUrl}`);
